@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import {ConfigModule} from "@nestjs/config";
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
+import { UserRolesModule } from './user-roles/user-roles.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
@@ -13,8 +16,11 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
       envFilePath: '.env'
     }),
-    ProductsModule, UsersModule, PrismaModule, AuthModule],
-  controllers: [AppController],
-  providers: [AppService],
+    ProductsModule, UsersModule, PrismaModule, AuthModule, RolesModule, UserRolesModule],
+  providers: [
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
+  ],
+  exports: [PrismaModule]
 })
 export class AppModule {}
