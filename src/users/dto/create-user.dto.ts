@@ -1,4 +1,4 @@
-import { UserRole } from "../types/roles.types";
+import {UserRole} from "../../common/types/roles.types";
 import {
   ArrayNotEmpty,
   IsArray, IsBoolean,
