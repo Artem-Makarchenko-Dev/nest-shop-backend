@@ -13,3 +13,5 @@ export interface JwtRequest extends Request{
     roles: string[]
   }
 }
+
+export type JwtUser = JwtRequest['user'];

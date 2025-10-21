@@ -29,15 +29,16 @@ export class AuthService {
   }
 
   async login(user: SafeUser): Promise<AuthResult> {
-    const payload = { sub: user.id, email: user.email, roles: user.roles };
+    const userWithRoles = await this.usersService.findOneWithRoles(user.id);
+    const roles = userWithRoles.userRoles.map((ur) => ur.role.name);
+
+    const payload = { sub: user.id, email: user.email, roles };
     const tokens = this.generateTokens(payload);
 
     const hashedRefreshToken = await this.hashPassword(tokens.refreshToken);
-    await this.usersService.update(user.id, {
-      refreshToken: hashedRefreshToken,
-    });
+    await this.usersService.update(user.id, { refreshToken: hashedRefreshToken });
 
-    return { ...tokens, user };
+    return { ...tokens, user: { ...user, roles } };
   }
 
   async verifyRefreshToken(token: string): Promise<SafeUser> {
@@ -50,21 +51,24 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
-    const isValidToken = await this.comparePasswords(token, user.refreshToken);
-    if (!isValidToken) {
-      throw new UnauthorizedException('Invalid or expired refresh token');
-    }
+    const isValid = await this.comparePasswords(token, user.refreshToken);
+    if (!isValid) throw new UnauthorizedException('Invalid or expired refresh token');
 
-    const { password: _, ...safeUser } = user;
+    const { password, ...safeUser } = user;
     return safeUser as SafeUser;
   }
 
   private generateTokens(payload: JwtPayload): Tokens {
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: '15m',
+    });
+
     const refreshToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_SECRET,
       expiresIn: '7d',
     });
+
     return { accessToken, refreshToken };
   }
 
