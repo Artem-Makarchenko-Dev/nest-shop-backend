@@ -5,7 +5,7 @@ echo "🚀 Starting entrypoint..."
 
 # --- Wait for PostgreSQL (важливо у Docker Compose) ---
 echo "⏳ Waiting for PostgreSQL to be ready..."
-until nc -z db 5432; do
+until nc -z "$(echo $DATABASE_URL | sed -E 's/.*@([^:/]+).*/\1/')" 5432; do
   sleep 1
 done
 echo "✅ PostgreSQL is up!"
