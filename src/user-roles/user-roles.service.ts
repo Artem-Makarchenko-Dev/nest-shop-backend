@@ -1,8 +1,8 @@
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
 import {UsersService} from "../users/users.service";
-import {ResponseRoleDto} from "./dto/response-role.dto";
 import {RolesService} from "../roles/roles.service";
+import {ResponseRoleDto} from "../roles/dto/response-role.dto";
 
 @Injectable()
 export class UserRolesService {
