@@ -14,7 +14,11 @@ import { RolesGuard } from './common/guards/roles.guard';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env'
+      envFilePath: [
+        `.env.${process.env.NODE_ENV}.local`,
+        `.env.${process.env.NODE_ENV}`,
+        '.env'
+      ]
     }),
     ProductsModule, UsersModule, PrismaModule, AuthModule, RolesModule, UserRolesModule],
   providers: [
