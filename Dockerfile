@@ -3,12 +3,9 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
 COPY prisma ./prisma
 RUN npx prisma generate
-
 COPY . .
-
 RUN yarn build
 
 
@@ -20,11 +17,12 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production
 
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY prisma ./prisma
 COPY --from=builder /app/dist ./dist
-
+COPY prisma ./prisma
 COPY ./docker/entrypoint.sh /app/entrypoint.sh
+
 RUN chmod +x /app/entrypoint.sh
 
-EXPOSE 4000
+EXPOSE 8080
+
 CMD ["/app/entrypoint.sh"]
