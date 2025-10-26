@@ -15,21 +15,24 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
+      console.log('🌍 Incoming origin:', origin);
+      console.log('✅ Allowed origins list:', origins);
       if (!origin) return callback(null, true);
-
-      const allowed = origins.some(o => origin.startsWith(o));
-      if (allowed) {
-        return callback(null, true);
-      } else {
-        console.warn(`❌ Blocked by CORS: ${origin}`);
-        return callback(new Error('Not allowed by CORS'));
-      }
+      const allowed = origins.some(o => origin.trim().startsWith(o));
+      console.log('✅ Allowed?', allowed);
+      return allowed ? callback(null, true) : callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
     optionsSuccessStatus: 200,
     preflightContinue: false,
+  });
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+    next();
   });
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
