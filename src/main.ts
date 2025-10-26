@@ -35,6 +35,11 @@ async function bootstrap() {
   }));
 
   const port = process.env.PORT || 4000;
+
+  app.getHttpAdapter().get('/health', (_, res) => {
+    res.send('OK');
+  });
+
   await app.listen(port, '0.0.0.0');
   console.log(`✅ Server running on port ${port}`);
 }

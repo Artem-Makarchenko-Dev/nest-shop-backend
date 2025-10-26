@@ -30,3 +30,5 @@ fi
 echo "✅ Starting NestJS application on port ${PORT:-4000}..."
 PORT=${PORT:-4000}
 node dist/src/main.js
+
+echo "✅ Application started on $PORT"
