@@ -5,17 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from "@/src/app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
   const configService = app.get<ConfigService>(ConfigService);
 
-  app.enableCors({
-    origin: 'https://artem-makarchenko-next-shop.vercel.app',
-    credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization',
-    optionsSuccessStatus: 200,
-    preflightContinue: false,
-  });
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
