@@ -8,20 +8,25 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
 
-  const origins = configService.get<string>('CORS_ORIGINS')?.split(',') ?? [];
+  const origins =
+    configService.get<string>('CORS_ORIGINS')?.split(',').map(o => o.trim()) ?? [];
+
+  console.log('Allowed origins:', origins);
 
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
 
-      if (origins.includes(origin)) {
+      const allowed = origins.some(o => origin.startsWith(o));
+      if (allowed) {
         return callback(null, true);
       } else {
+        console.warn(`❌ Blocked by CORS: ${origin}`);
         return callback(new Error('Not allowed by CORS'));
       }
     },
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
   });
   app.useGlobalPipes(new ValidationPipe({
