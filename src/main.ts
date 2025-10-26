@@ -14,14 +14,10 @@ async function bootstrap() {
   console.log('Allowed origins:', origins);
 
   app.enableCors({
-    origin: (origin, callback) => {
-      console.log('🌍 Incoming origin:', origin);
-      console.log('✅ Allowed origins list:', origins);
-      if (!origin) return callback(null, true);
-      const allowed = origins.some(o => origin.trim().startsWith(o));
-      console.log('✅ Allowed?', allowed);
-      return allowed ? callback(null, true) : callback(new Error('Not allowed by CORS'));
-    },
+    origin:[
+      'https://artem-makarchenko-next-shop.vercel.app',
+      'http://localhost:3000',
+    ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
