@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   console.log('🚀 Bootstrap started');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
 
   app.use((req, res, next) => {
@@ -35,7 +35,9 @@ async function bootstrap() {
   }));
 
   const port = configService.get<number>('PORT') ?? 4000;
-  await app.listen(port);
+  console.log('process.env.PORT', process.env.PORT)
+  console.log('port', port)
+  await app.listen(port, '0.0.0.0');
   console.log(`✅ Server running on port ${port}`);
 }
 
