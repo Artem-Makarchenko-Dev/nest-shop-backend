@@ -27,8 +27,6 @@ services:
       JWT_SECRET: "supersecret"
       JWT_REFRESH_SECRET: "superrefreshsecret"
       NODE_ENV: "production"
-    ports:
-      - "4000:4000"
     command: ["/app/entrypoint.sh"]
 
 volumes:
