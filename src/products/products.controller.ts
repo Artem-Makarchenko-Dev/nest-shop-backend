@@ -47,7 +47,6 @@ export class ProductsController {
     return this.productsService.update(id, dto);
   }
 
-  @Roles(USER_ROLES.ADMIN)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.delete(id);
