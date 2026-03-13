@@ -3,12 +3,12 @@ import { UserRolesController } from './user-roles.controller';
 import { UserRolesService } from './user-roles.service';
 import {UsersModule} from "../users/users.module";
 import {RolesModule} from "../roles/roles.module";
-import {PrismaService} from "../prisma/prisma.service";
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [UsersModule, RolesModule],
+  imports: [UsersModule, RolesModule, PrismaModule],
   controllers: [UserRolesController],
-  providers: [UserRolesService, PrismaService],
+  providers: [UserRolesService],
 })
 
 export class UserRolesModule {}
