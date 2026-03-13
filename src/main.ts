@@ -4,10 +4,16 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('FRONT_URL:', process.env.FRONT_URL);
+
   const allowedOrigins = (process.env.FRONT_URL || '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
+
+  console.log('allowedOrigins:', allowedOrigins);
 
   app.getHttpAdapter().get('/health', (_, res) => {
     res.send('OK');
