@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 const allowedOrigins = [
   'http://localhost:8080',
-  'https://artem-makarchenko-next-shop.vercel.app/'
+  'https://artem-makarchenko-next-shop.vercel.app'
 ];
 
 async function bootstrap() {
