@@ -10,6 +10,7 @@ import { Public } from '../common/decorators/public.decorator';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @Public()
   @Get()
   findAll() {
     return this.categoriesService.findAll();
