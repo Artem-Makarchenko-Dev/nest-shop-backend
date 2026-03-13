@@ -26,7 +26,7 @@ export class ProductsController {
   @Public()
   @Get()
   findAll() {
-    return this.productsService.findAll();
+    return [{ ok: true }];
   }
 
   @Public()
